@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: linktree_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    image: backend
+    build:
+      context: ./backend
+    ports:
+      - 5000:5000
+    environment:
+      DB_HOST: db
+      DB_USER: user
+      DB_PASSWORD: userpassword
+      DB_NAME: linktree_db
+    depends_on:
+      - db
+
+  frontend:
+    image: frontend
+    build:
+      context: ./frontend
+    ports:
+      - 8080:80
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
