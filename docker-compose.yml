@@ -1,8 +1,10 @@
 version: '3.8'
 
 services:
-  db:
-    image: mysql:8.0
+  database:
+    image: database
+    build:
+      context: ./database
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: linktree_db
@@ -20,12 +22,12 @@ services:
     ports:
       - 5000:5000
     environment:
-      DB_HOST: db
+      DB_HOST: database
       DB_USER: user
       DB_PASSWORD: userpassword
       DB_NAME: linktree_db
     depends_on:
-      - db
+      - database
 
   frontend:
     image: frontend
